@@ -44,15 +44,90 @@ class _SuakiAppState extends State<SuakiApp> {
   const SizedBox(height:12),Text(s.description,style:const TextStyle(color:Colors.black54,height:1.4,fontSize:12)),const SizedBox(height:14),
   Row(children:[Text('₹${s.price}',style:const TextStyle(fontSize:19,color:navy,fontWeight:FontWeight.w800)),const Spacer(),FilledButton.icon(onPressed:()=>add(s),icon:const Icon(Icons.add_shopping_cart,size:17),label:const Text('Add to cart'))])
  ])));
- Widget cartPage()=>Padding(padding:const EdgeInsets.all(18),child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[
-  const SizedBox(height:10),const Text('Your cart',style:TextStyle(fontSize:26,fontWeight:FontWeight.bold,color:navy)),const SizedBox(height:15),
-  if(cart.isEmpty) const Expanded(child:Center(child:Column(mainAxisSize:MainAxisSize.min,children:[Icon(Icons.shopping_bag_outlined,size:58,color:Colors.black26),SizedBox(height:12),Text('Your cart is empty',style:TextStyle(fontSize:17,fontWeight:FontWeight.bold)),Text('Add a service to get started.',style:TextStyle(color:Colors.black54))])))
-  else ...[
-   Expanded(child:ListView(children:cart.entries.map((e)=>Card(elevation:0,child:ListTile(title:Text(e.key.title,style:const TextStyle(fontWeight:FontWeight.bold)),subtitle:Text('₹${e.key.price} each'),trailing:Row(mainAxisSize:MainAxisSize.min,children:[IconButton(onPressed:()=>change(e.key,-1),icon:const Icon(Icons.remove_circle_outline)),Text('${e.value}'),IconButton(onPressed:()=>change(e.key,1),icon:const Icon(Icons.add_circle_outline))]))).toList())),
-   const Divider(),Row(children:[const Text('Total',style:TextStyle(fontSize:17,fontWeight:FontWeight.bold)),const Spacer(),Text('₹$total',style:const TextStyle(fontSize:22,color:navy,fontWeight:FontWeight.w900))]),const SizedBox(height:12),
-   SizedBox(width:double.infinity,child:FilledButton(onPressed:()=>showDialog(context:context,builder:(c)=>AlertDialog(title:const Text('Demo checkout'),content:const Text('This prototype uses sample cart data. Live WooCommerce checkout will be connected in a later version.'),actions:[TextButton(onPressed:()=>Navigator.pop(c),child:const Text('OK'))])),child:const Text('Continue to checkout')))
-  ]
- ]));
+ Widget cartPage() => Padding(
+  padding: const EdgeInsets.all(18),
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      const SizedBox(height: 10),
+      const Text('Your cart', style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: navy)),
+      const SizedBox(height: 15),
+      if (cart.isEmpty)
+        const Expanded(
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.shopping_bag_outlined, size: 58, color: Colors.black26),
+                SizedBox(height: 12),
+                Text('Your cart is empty', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
+                Text('Add a service to get started.', style: TextStyle(color: Colors.black54)),
+              ],
+            ),
+          ),
+        )
+      else ...[
+        Expanded(
+          child: ListView(
+            children: cart.entries.map((entry) {
+              final service = entry.key;
+              final quantity = entry.value;
+              return Card(
+                elevation: 0,
+                child: ListTile(
+                  title: Text(service.title, style: const TextStyle(fontWeight: FontWeight.bold)),
+                  subtitle: Text('₹${service.price} each'),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        onPressed: () => change(service, -1),
+                        icon: const Icon(Icons.remove_circle_outline),
+                      ),
+                      Text('$quantity'),
+                      IconButton(
+                        onPressed: () => change(service, 1),
+                        icon: const Icon(Icons.add_circle_outline),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+        const Divider(),
+        Row(
+          children: [
+            const Text('Total', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
+            const Spacer(),
+            Text('₹$total', style: const TextStyle(fontSize: 22, color: navy, fontWeight: FontWeight.w900)),
+          ],
+        ),
+        const SizedBox(height: 12),
+        SizedBox(
+          width: double.infinity,
+          child: FilledButton(
+            onPressed: () => showDialog(
+              context: context,
+              builder: (dialogContext) => AlertDialog(
+                title: const Text('Demo checkout'),
+                content: const Text('This prototype uses sample cart data. Live WooCommerce checkout will be connected in a later version.'),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(dialogContext),
+                    child: const Text('OK'),
+                  ),
+                ],
+              ),
+            ),
+            child: const Text('Continue to checkout'),
+          ),
+        ),
+      ],
+    ],
+  ),
+ );
  Widget accountPage()=>ListView(padding:const EdgeInsets.all(20),children:[
   const SizedBox(height:12),const Text('My account',style:TextStyle(fontSize:26,fontWeight:FontWeight.bold,color:navy)),const SizedBox(height:18),
   Container(padding:const EdgeInsets.all(20),decoration:BoxDecoration(color:navy,borderRadius:BorderRadius.circular(18)),child:const Column(crossAxisAlignment:CrossAxisAlignment.start,children:[Icon(Icons.account_circle_outlined,color:Colors.white,size:42),SizedBox(height:10),Text('Welcome to Suaki',style:TextStyle(color:Colors.white,fontSize:20,fontWeight:FontWeight.bold)),Text('Sign-in and order features will be enabled when the live store API is connected.',style:TextStyle(color:Color(0xFFDCE8FF),height:1.4))])),
