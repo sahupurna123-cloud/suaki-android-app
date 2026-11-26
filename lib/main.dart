@@ -24,7 +24,7 @@ class _SuakiAppState extends State<SuakiApp> {
   return MaterialApp(debugShowCheckedModeBanner:false,title:'Suaki',theme:ThemeData(colorScheme:ColorScheme.fromSeed(seedColor:blue),scaffoldBackgroundColor:pale,useMaterial3:true),
    home:Scaffold(body:SafeArea(child:pages[tab]),bottomNavigationBar:NavigationBar(selectedIndex:tab,onDestinationSelected:(v)=>setState(()=>tab=v),destinations:[
     const NavigationDestination(icon:Icon(Icons.home_outlined),selectedIcon:Icon(Icons.home),label:'Home'),
-    NavigationDestination(icon:const Icon(Icons.shopping_bag_outlined),selectedIcon:const Icon(Icons.shopping_bag),label:'Cart (\${count})'),
+    NavigationDestination(icon:const Icon(Icons.shopping_bag_outlined),selectedIcon:const Icon(Icons.shopping_bag),label:'Cart (${count})'),
     const NavigationDestination(icon:Icon(Icons.person_outline),selectedIcon:Icon(Icons.person),label:'Account'),
    ])));
  }
@@ -42,13 +42,13 @@ class _SuakiAppState extends State<SuakiApp> {
  Widget serviceCard(Service s)=>Card(margin:const EdgeInsets.only(bottom:13),elevation:0,shape:RoundedRectangleBorder(borderRadius:BorderRadius.circular(18),side:const BorderSide(color:Color(0xFFE5EAF3))),child:Padding(padding:const EdgeInsets.all(16),child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[
   Row(children:[Container(padding:const EdgeInsets.all(12),decoration:BoxDecoration(color:const Color(0xFFEAF1FF),borderRadius:BorderRadius.circular(13)),child:const Icon(Icons.link,color:blue,size:25)),const SizedBox(width:12),Expanded(child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[Text(s.category,style:const TextStyle(color:blue,fontSize:10,fontWeight:FontWeight.bold,letterSpacing:.8)),const SizedBox(height:4),Text(s.title,style:const TextStyle(fontWeight:FontWeight.bold,fontSize:15,color:navy))]))]),
   const SizedBox(height:12),Text(s.description,style:const TextStyle(color:Colors.black54,height:1.4,fontSize:12)),const SizedBox(height:14),
-  Row(children:[Text('₹\${s.price}',style:const TextStyle(fontSize:19,color:navy,fontWeight:FontWeight.w800)),const Spacer(),FilledButton.icon(onPressed:()=>add(s),icon:const Icon(Icons.add_shopping_cart,size:17),label:const Text('Add to cart'))])
+  Row(children:[Text('₹${s.price}',style:const TextStyle(fontSize:19,color:navy,fontWeight:FontWeight.w800)),const Spacer(),FilledButton.icon(onPressed:()=>add(s),icon:const Icon(Icons.add_shopping_cart,size:17),label:const Text('Add to cart'))])
  ])));
  Widget cartPage()=>Padding(padding:const EdgeInsets.all(18),child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[
   const SizedBox(height:10),const Text('Your cart',style:TextStyle(fontSize:26,fontWeight:FontWeight.bold,color:navy)),const SizedBox(height:15),
   if(cart.isEmpty) const Expanded(child:Center(child:Column(mainAxisSize:MainAxisSize.min,children:[Icon(Icons.shopping_bag_outlined,size:58,color:Colors.black26),SizedBox(height:12),Text('Your cart is empty',style:TextStyle(fontSize:17,fontWeight:FontWeight.bold)),Text('Add a service to get started.',style:TextStyle(color:Colors.black54))])))
   else ...[
-   Expanded(child:ListView(children:cart.entries.map((e)=>Card(elevation:0,child:ListTile(title:Text(e.key.title,style:const TextStyle(fontWeight:FontWeight.bold)),subtitle:Text('₹\${e.key.price} each'),trailing:Row(mainAxisSize:MainAxisSize.min,children:[IconButton(onPressed:()=>change(e.key,-1),icon:const Icon(Icons.remove_circle_outline)),Text('\${e.value}'),IconButton(onPressed:()=>change(e.key,1),icon:const Icon(Icons.add_circle_outline))]))).toList())),
+   Expanded(child:ListView(children:cart.entries.map((e)=>Card(elevation:0,child:ListTile(title:Text(e.key.title,style:const TextStyle(fontWeight:FontWeight.bold)),subtitle:Text('₹${e.key.price} each'),trailing:Row(mainAxisSize:MainAxisSize.min,children:[IconButton(onPressed:()=>change(e.key,-1),icon:const Icon(Icons.remove_circle_outline)),Text('${e.value}'),IconButton(onPressed:()=>change(e.key,1),icon:const Icon(Icons.add_circle_outline))]))).toList())),
    const Divider(),Row(children:[const Text('Total',style:TextStyle(fontSize:17,fontWeight:FontWeight.bold)),const Spacer(),Text('₹$total',style:const TextStyle(fontSize:22,color:navy,fontWeight:FontWeight.w900))]),const SizedBox(height:12),
    SizedBox(width:double.infinity,child:FilledButton(onPressed:()=>showDialog(context:context,builder:(c)=>AlertDialog(title:const Text('Demo checkout'),content:const Text('This prototype uses sample cart data. Live WooCommerce checkout will be connected in a later version.'),actions:[TextButton(onPressed:()=>Navigator.pop(c),child:const Text('OK'))])),child:const Text('Continue to checkout')))
   ]
